@@ -30,14 +30,16 @@ app.post("/signup", async (req, res) => {
     res.send("Signup Success");
 })
 
-app.post("/maketodo", (req, res) => {
+app.post("/maketodo", async (req, res) => {
     const {title, description} = req.body;
 
     const newTodo = new Todo({
         title: title,
         description: description,
-        isDone: Boolean
+        isDone: false
     })
+    await newTodo.save();
+    return res.send("Todo Created");
 })
 
 app.post("/deletetodo", (req, res) => {
