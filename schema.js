@@ -7,4 +7,12 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+const todoSchema = new mongoose.Schema({
+    title: String,
+    description: String,
+    isDone: Boolean
+})
+
+const Todo = mongoose.model("todos", todoSchema);
+
+module.exports = {User, Todo};
