@@ -13,8 +13,24 @@ app.get('/', (req, res) => {
   res.send('Welcome to Backend!')
 })
 
-app.post("/login", (req, res) => {
-    res.send("Login Success");
+app.post("/login", async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (!email) {
+        res.send("Email is required");
+    }
+
+    if (!password) {
+        res.send("Password is required");
+    }
+
+    const findUser = await User.findOne({email: email, password: password});
+    if(!findUser) {
+        res.send("Invalid Credentials");
+    }
+    return res.send("Login Success");
+
 })
 
 app.post("/signup", async (req, res) => {
