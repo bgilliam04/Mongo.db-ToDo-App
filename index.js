@@ -3,7 +3,7 @@ const app = express()
 const port = 3003;
 
 const mongoose = require('mongoose');
-const User = require('./schema');
+const {User, Todo} = require('./schema');
 
 app.use(express.json());
 
@@ -14,36 +14,30 @@ app.get('/', (req, res) => {
 })
 
 app.post("/login", async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-
-    if (!email) {
-        res.send("Email is required");
-    }
-
-    if (!password) {
-        res.send("Password is required");
-    }
-
-    const findUser = await User.findOne({email: email, password: password});
-    if(!findUser) {
-        res.send("Invalid Credentials");
-    }
+    const { email, password } = req.body; 
+    if (!email) return res.send("Email is required");
+    if (!password) return  res.send("Password is required");
+    const findUser = await User.findOne({ email, password });
+    if(!findUser) return res.send("Invalid Credentials");
     return res.send("Login Success");
-
 })
 
 app.post("/signup", async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-
     const newPerson = new User({email: email, password:password});
     await newPerson.save();
     res.send("Signup Success");
 })
 
 app.post("/maketodo", (req, res) => {
-    res.send("Todo Created");
+    const {title, description} = req.body;
+
+    const newTodo = new Todo({
+        title: title,
+        description: description,
+        isDone: Boolean
+    })
 })
 
 app.post("/deletetodo", (req, res) => {
